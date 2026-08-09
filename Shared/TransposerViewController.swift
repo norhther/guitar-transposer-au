@@ -20,7 +20,13 @@ final class TransposerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let tree = audioUnit.parameterTree else { return }
-        let hosting = UIHostingController(rootView: TransposerView(meter: meter, parameterTree: tree))
+        let audioUnit = self.audioUnit
+        let hosting = UIHostingController(rootView: TransposerView(
+            meter: meter,
+            parameterTree: tree,
+            initialBypassed: audioUnit.shouldBypassEffect,
+            setBypassed: { audioUnit.shouldBypassEffect = $0 }
+        ))
         addChild(hosting)
         hosting.view.frame = view.bounds
         hosting.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]

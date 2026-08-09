@@ -4,6 +4,8 @@ import AudioToolbox
 struct TransposerView: View {
     @ObservedObject var meter: PeakMeterStore
     let parameterTree: AUParameterTree
+    let initialBypassed: Bool
+    let setBypassed: (Bool) -> Void
 
     @State private var semitones: Double = 0
     @State private var latencyModeIndex: Double = 1
@@ -35,6 +37,9 @@ struct TransposerView: View {
             }
 
             Toggle("Bypass", isOn: $bypassed)
+                .onChange(of: bypassed) { newValue in
+                    setBypassed(newValue)
+                }
 
             HStack {
                 MeterBar(label: "In", level: meter.inputLevel)
@@ -45,6 +50,7 @@ struct TransposerView: View {
         .onAppear {
             semitones = Double(semitonesParam.value)
             latencyModeIndex = Double(latencyModeParam.value)
+            bypassed = initialBypassed
         }
     }
 }
