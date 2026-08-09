@@ -11,6 +11,7 @@
 		353F44434E94A6B189148A37 /* SignalsmithBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 415B8F93B83D66EBCC867D1A /* SignalsmithBridge.mm */; };
 		4F0F187F7CE368AB1D5FCE2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A80FFA310D4068E81FFAAE /* ContentView.swift */; };
 		62BBFB36AD970FAAF292DA1A /* IntervalName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24906A259E81C61B9D670291 /* IntervalName.swift */; };
+		6E6654DC8B35582958622ED6 /* TransposerAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175E26A60EA683C535696858 /* TransposerAudioUnit.swift */; };
 		77BFAE431FFF6841D4739D6D /* TransposerParameterAddresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */; };
 		910D0142DF64D678884E4437 /* TransposerParameterAddresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */; };
 		96E2F118A7BD71D72DB0B02F /* TransposerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerParameterAddresses.swift; sourceTree = "<group>"; };
+		175E26A60EA683C535696858 /* TransposerAudioUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerAudioUnit.swift; sourceTree = "<group>"; };
 		1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TransposerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		24906A259E81C61B9D670291 /* IntervalName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalName.swift; sourceTree = "<group>"; };
 		2495849CBE21B64A505229BC /* SignalsmithBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalsmithBridge.h; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				963253B420793442628C07A9 /* Info.plist */,
+				175E26A60EA683C535696858 /* TransposerAudioUnit.swift */,
 				CA4053AD51643DE4DED5D8AB /* TransposerAudioUnitFactory.swift */,
 				92D823AA2D9AF226DE8D366D /* TransposerExtension-Bridging-Header.h */,
 				1F0DC92DAB2A6C86F31D6C18 /* DSP */,
@@ -195,6 +198,7 @@
 			files = (
 				C333A3203537AB4CE4815C2F /* IntervalName.swift in Sources */,
 				353F44434E94A6B189148A37 /* SignalsmithBridge.mm in Sources */,
+				6E6654DC8B35582958622ED6 /* TransposerAudioUnit.swift in Sources */,
 				263FAEA9A6765584480698A9 /* TransposerAudioUnitFactory.swift in Sources */,
 				77BFAE431FFF6841D4739D6D /* TransposerParameterAddresses.swift in Sources */,
 			);
