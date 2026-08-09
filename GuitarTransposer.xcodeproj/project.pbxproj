@@ -7,16 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08230AD28204D4B4F1BD559A /* TransposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19988CFB0102B05CDED55E0D /* TransposerView.swift */; };
+		1A2756DDB82D32538010C0C5 /* TransposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB61FD831B065DC7E7948F6 /* TransposerViewController.swift */; };
 		263FAEA9A6765584480698A9 /* TransposerAudioUnitFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4053AD51643DE4DED5D8AB /* TransposerAudioUnitFactory.swift */; };
 		353F44434E94A6B189148A37 /* SignalsmithBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 415B8F93B83D66EBCC867D1A /* SignalsmithBridge.mm */; };
+		47B93D10B13FE5969F7D040B /* TransposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19988CFB0102B05CDED55E0D /* TransposerView.swift */; };
 		4F0F187F7CE368AB1D5FCE2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A80FFA310D4068E81FFAAE /* ContentView.swift */; };
 		62BBFB36AD970FAAF292DA1A /* IntervalName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24906A259E81C61B9D670291 /* IntervalName.swift */; };
 		6E6654DC8B35582958622ED6 /* TransposerAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175E26A60EA683C535696858 /* TransposerAudioUnit.swift */; };
 		77BFAE431FFF6841D4739D6D /* TransposerParameterAddresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */; };
+		7AC94022EF6572A488DCACE2 /* PeakMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5934A13295C8C5D1B5B6FC6 /* PeakMeter.swift */; };
+		7E2161E1E1AF05CC6E902B71 /* PeakMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5934A13295C8C5D1B5B6FC6 /* PeakMeter.swift */; };
 		910D0142DF64D678884E4437 /* TransposerParameterAddresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */; };
 		96E2F118A7BD71D72DB0B02F /* TransposerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A92940C2EA3FC0A2BEE5A141 /* TransposerAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175E26A60EA683C535696858 /* TransposerAudioUnit.swift */; };
 		C333A3203537AB4CE4815C2F /* IntervalName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24906A259E81C61B9D670291 /* IntervalName.swift */; };
 		CBBA7D29ED2E4AA77D03A7B1 /* TransposerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */; };
+		E321D3634E255B4517DDCC4D /* SignalsmithBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 415B8F93B83D66EBCC867D1A /* SignalsmithBridge.mm */; };
+		FEFD7008461561F715AB2107 /* TransposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB61FD831B065DC7E7948F6 /* TransposerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +54,7 @@
 /* Begin PBXFileReference section */
 		0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerParameterAddresses.swift; sourceTree = "<group>"; };
 		175E26A60EA683C535696858 /* TransposerAudioUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerAudioUnit.swift; sourceTree = "<group>"; };
+		19988CFB0102B05CDED55E0D /* TransposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerView.swift; sourceTree = "<group>"; };
 		1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TransposerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		24906A259E81C61B9D670291 /* IntervalName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalName.swift; sourceTree = "<group>"; };
 		2495849CBE21B64A505229BC /* SignalsmithBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalsmithBridge.h; sourceTree = "<group>"; };
@@ -53,11 +62,13 @@
 		53C210B682CDF3418E48ED39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		92D823AA2D9AF226DE8D366D /* TransposerExtension-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TransposerExtension-Bridging-Header.h"; sourceTree = "<group>"; };
 		963253B420793442628C07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BEB61FD831B065DC7E7948F6 /* TransposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerViewController.swift; sourceTree = "<group>"; };
 		BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerApp.swift; sourceTree = "<group>"; };
 		CA4053AD51643DE4DED5D8AB /* TransposerAudioUnitFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerAudioUnitFactory.swift; sourceTree = "<group>"; };
 		D6A80FFA310D4068E81FFAAE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E343952647FA87F6BE4B4DD1 /* TransposerApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TransposerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7108331D410993C158E22AB /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		F5934A13295C8C5D1B5B6FC6 /* PeakMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeakMeter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -66,7 +77,10 @@
 			children = (
 				E7108331D410993C158E22AB /* .gitkeep */,
 				24906A259E81C61B9D670291 /* IntervalName.swift */,
+				F5934A13295C8C5D1B5B6FC6 /* PeakMeter.swift */,
 				0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */,
+				19988CFB0102B05CDED55E0D /* TransposerView.swift */,
+				BEB61FD831B065DC7E7948F6 /* TransposerViewController.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -197,10 +211,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C333A3203537AB4CE4815C2F /* IntervalName.swift in Sources */,
+				7AC94022EF6572A488DCACE2 /* PeakMeter.swift in Sources */,
 				353F44434E94A6B189148A37 /* SignalsmithBridge.mm in Sources */,
 				6E6654DC8B35582958622ED6 /* TransposerAudioUnit.swift in Sources */,
 				263FAEA9A6765584480698A9 /* TransposerAudioUnitFactory.swift in Sources */,
 				77BFAE431FFF6841D4739D6D /* TransposerParameterAddresses.swift in Sources */,
+				47B93D10B13FE5969F7D040B /* TransposerView.swift in Sources */,
+				1A2756DDB82D32538010C0C5 /* TransposerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,8 +227,13 @@
 			files = (
 				4F0F187F7CE368AB1D5FCE2A /* ContentView.swift in Sources */,
 				62BBFB36AD970FAAF292DA1A /* IntervalName.swift in Sources */,
+				7E2161E1E1AF05CC6E902B71 /* PeakMeter.swift in Sources */,
+				E321D3634E255B4517DDCC4D /* SignalsmithBridge.mm in Sources */,
 				CBBA7D29ED2E4AA77D03A7B1 /* TransposerApp.swift in Sources */,
+				A92940C2EA3FC0A2BEE5A141 /* TransposerAudioUnit.swift in Sources */,
 				910D0142DF64D678884E4437 /* TransposerParameterAddresses.swift in Sources */,
+				08230AD28204D4B4F1BD559A /* TransposerView.swift in Sources */,
+				FEFD7008461561F715AB2107 /* TransposerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +310,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendor/signalsmith-stretch",
+					"$(SRCROOT)/Vendor/signalsmith-linear/..",
+				);
 				INFOPLIST_FILE = TransposerApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -295,6 +321,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
@@ -304,6 +331,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendor/signalsmith-stretch",
+					"$(SRCROOT)/Vendor/signalsmith-linear/..",
+				);
 				INFOPLIST_FILE = TransposerApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -311,6 +342,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
