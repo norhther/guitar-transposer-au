@@ -265,7 +265,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
@@ -281,7 +281,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -301,7 +301,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.extension;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -385,7 +385,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.extension;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};

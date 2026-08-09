@@ -25,6 +25,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.norhther.guitartransposer
         INFOPLIST_FILE: TransposerApp/Info.plist
+        TARGETED_DEVICE_FAMILY: "2"
     dependencies:
       - target: TransposerExtension
         embed: true
@@ -39,6 +40,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.norhther.guitartransposer.extension
         INFOPLIST_FILE: TransposerExtension/Info.plist
         SWIFT_OBJC_BRIDGING_HEADER: TransposerExtension/TransposerExtension-Bridging-Header.h
+        TARGETED_DEVICE_FAMILY: "2"
         HEADER_SEARCH_PATHS:
           - "$(SRCROOT)/Vendor/signalsmith-stretch"
           - "$(SRCROOT)/Vendor/signalsmith-linear/.."
