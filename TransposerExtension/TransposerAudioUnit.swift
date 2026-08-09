@@ -9,7 +9,8 @@ public class TransposerAudioUnit: AUAudioUnit {
     private var _outputBusArray: AUAudioUnitBusArray!
 
     private var scratchInput: [[Float]] = []
-    private var scratchInputPointers: [UnsafeMutablePointer<Float>] = []
+    private var scratchInputPointers: [UnsafePointer<Float>?] = []
+    private var outputPointers: [UnsafeMutablePointer<Float>?] = []
 
     private let semitonesParam: AUParameter
     private let latencyModeParam: AUParameter
@@ -99,11 +100,15 @@ public class TransposerAudioUnit: AUAudioUnit {
 
         let maxFrames = Int(maximumFramesToRender)
         scratchInput = Array(repeating: [Float](repeating: 0, count: maxFrames), count: channelCount)
+        scratchInputPointers = Array(repeating: nil, count: channelCount)
+        outputPointers = Array(repeating: nil, count: channelCount)
     }
 
     public override func deallocateRenderResources() {
         bridge = nil
         scratchInput = []
+        scratchInputPointers = []
+        outputPointers = []
         super.deallocateRenderResources()
     }
 
@@ -120,26 +125,19 @@ public class TransposerAudioUnit: AUAudioUnit {
             let channelCount = bufferList.count
             let frames = Int(frameCount)
 
-            var inputPointers: [UnsafePointer<Float>?] = []
-            var outputPointers: [UnsafeMutablePointer<Float>?] = []
-            inputPointers.reserveCapacity(channelCount)
-            outputPointers.reserveCapacity(channelCount)
-
+            // Write into the persistent instance-level pointer arrays in place (index
+            // assignment, not append) so no array backing store is allocated per render call.
             for i in 0..<channelCount {
                 let outPtr = bufferList[i].mData!.assumingMemoryBound(to: Float.self)
                 self.scratchInput[i].withUnsafeMutableBufferPointer { scratch in
                     scratch.baseAddress!.update(from: outPtr, count: frames)
+                    self.scratchInputPointers[i] = UnsafePointer(scratch.baseAddress!)
                 }
-                outputPointers.append(outPtr)
-            }
-            for i in 0..<channelCount {
-                self.scratchInput[i].withUnsafeMutableBufferPointer { scratch in
-                    inputPointers.append(UnsafePointer(scratch.baseAddress!))
-                }
+                self.outputPointers[i] = outPtr
             }
 
-            inputPointers.withUnsafeMutableBufferPointer { inBuf in
-                outputPointers.withUnsafeMutableBufferPointer { outBuf in
+            self.scratchInputPointers.withUnsafeMutableBufferPointer { inBuf in
+                self.outputPointers.withUnsafeMutableBufferPointer { outBuf in
                     bridge.processInputs(inBuf.baseAddress!, outputs: outBuf.baseAddress!, frameCount: frameCount)
                 }
             }
