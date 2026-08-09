@@ -20,6 +20,33 @@
 	<string>1</string>
 	<key>NSExtension</key>
 	<dict>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>AudioComponents</key>
+			<array>
+				<dict>
+					<key>description</key>
+					<string>Real-time guitar pitch transposer, -12 to +12 semitones</string>
+					<key>manufacturer</key>
+					<string>Nort</string>
+					<key>name</key>
+					<string>Norhther: Guitar Transposer</string>
+					<key>subtype</key>
+					<string>gtrx</string>
+					<key>tags</key>
+					<array>
+						<string>Effects</string>
+						<string>Pitch</string>
+					</array>
+					<key>type</key>
+					<string>aufx</string>
+					<key>version</key>
+					<integer>1</integer>
+					<key>sandboxSafe</key>
+					<true/>
+				</dict>
+			</array>
+		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.AudioUnit-UI</string>
 		<key>NSExtensionPrincipalClass</key>
