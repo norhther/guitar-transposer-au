@@ -1,0 +1,425 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		263FAEA9A6765584480698A9 /* TransposerAudioUnitFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4053AD51643DE4DED5D8AB /* TransposerAudioUnitFactory.swift */; };
+		4F0F187F7CE368AB1D5FCE2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A80FFA310D4068E81FFAAE /* ContentView.swift */; };
+		96E2F118A7BD71D72DB0B02F /* TransposerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CBBA7D29ED2E4AA77D03A7B1 /* TransposerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		18FEACD7C9A340AB720E83CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BDB15F70886618EEA4257355 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F50B99C25B736248DAC645ED;
+			remoteInfo = TransposerExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		065528FB50BFB0A19EDFBC3C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				96E2F118A7BD71D72DB0B02F /* TransposerExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TransposerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		53C210B682CDF3418E48ED39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		92D823AA2D9AF226DE8D366D /* TransposerExtension-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TransposerExtension-Bridging-Header.h"; sourceTree = "<group>"; };
+		963253B420793442628C07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerApp.swift; sourceTree = "<group>"; };
+		CA4053AD51643DE4DED5D8AB /* TransposerAudioUnitFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerAudioUnitFactory.swift; sourceTree = "<group>"; };
+		D6A80FFA310D4068E81FFAAE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E343952647FA87F6BE4B4DD1 /* TransposerApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TransposerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7108331D410993C158E22AB /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1A692CD9A7A31FE934952B71 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E7108331D410993C158E22AB /* .gitkeep */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		43FBCE2CDF7BE6981107E24F /* TransposerExtension */ = {
+			isa = PBXGroup;
+			children = (
+				963253B420793442628C07A9 /* Info.plist */,
+				CA4053AD51643DE4DED5D8AB /* TransposerAudioUnitFactory.swift */,
+				92D823AA2D9AF226DE8D366D /* TransposerExtension-Bridging-Header.h */,
+			);
+			path = TransposerExtension;
+			sourceTree = "<group>";
+		};
+		4E4FC48319ABE7EEE26ADBEF /* TransposerApp */ = {
+			isa = PBXGroup;
+			children = (
+				D6A80FFA310D4068E81FFAAE /* ContentView.swift */,
+				53C210B682CDF3418E48ED39 /* Info.plist */,
+				BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */,
+			);
+			path = TransposerApp;
+			sourceTree = "<group>";
+		};
+		ABBA7161BB420569644B9706 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E343952647FA87F6BE4B4DD1 /* TransposerApp.app */,
+				1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F239E912964C70D2212EF75D = {
+			isa = PBXGroup;
+			children = (
+				1A692CD9A7A31FE934952B71 /* Shared */,
+				4E4FC48319ABE7EEE26ADBEF /* TransposerApp */,
+				43FBCE2CDF7BE6981107E24F /* TransposerExtension */,
+				ABBA7161BB420569644B9706 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		02FB628962CC90A5E80B75B6 /* TransposerApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7757077F2F4B2DFFAB86EFC7 /* Build configuration list for PBXNativeTarget "TransposerApp" */;
+			buildPhases = (
+				E6B14E17E373CB565763A2C2 /* Sources */,
+				065528FB50BFB0A19EDFBC3C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BA1DAD13E71FBB49D9D6B71A /* PBXTargetDependency */,
+			);
+			name = TransposerApp;
+			packageProductDependencies = (
+			);
+			productName = TransposerApp;
+			productReference = E343952647FA87F6BE4B4DD1 /* TransposerApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F50B99C25B736248DAC645ED /* TransposerExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A442C5ED9F05B519DC210B55 /* Build configuration list for PBXNativeTarget "TransposerExtension" */;
+			buildPhases = (
+				B2FF09BE0563F7D2D58F3D80 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TransposerExtension;
+			packageProductDependencies = (
+			);
+			productName = TransposerExtension;
+			productReference = 1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BDB15F70886618EEA4257355 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 10E3A49509440C61444C5D25 /* Build configuration list for PBXProject "GuitarTransposer" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F239E912964C70D2212EF75D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = ABBA7161BB420569644B9706 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				02FB628962CC90A5E80B75B6 /* TransposerApp */,
+				F50B99C25B736248DAC645ED /* TransposerExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B2FF09BE0563F7D2D58F3D80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				263FAEA9A6765584480698A9 /* TransposerAudioUnitFactory.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6B14E17E373CB565763A2C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F0F187F7CE368AB1D5FCE2A /* ContentView.swift in Sources */,
+				CBBA7D29ED2E4AA77D03A7B1 /* TransposerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BA1DAD13E71FBB49D9D6B71A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F50B99C25B736248DAC645ED /* TransposerExtension */;
+			targetProxy = 18FEACD7C9A340AB720E83CC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1505BABC1122A27D4F2B1ABC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		1F10B2F2D9E39B2E21B360F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = TransposerApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		513618008F268F93015BCA4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = TransposerApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6DC838AA239349EC630752C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendor/signalsmith-stretch",
+					"$(SRCROOT)/Vendor/signalsmith-linear/..",
+				);
+				INFOPLIST_FILE = TransposerExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.extension;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		947252613B5B4BFDC306A62B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		95ACA785574D02CAE7F7ED8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendor/signalsmith-stretch",
+					"$(SRCROOT)/Vendor/signalsmith-linear/..",
+				);
+				INFOPLIST_FILE = TransposerExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.extension;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		10E3A49509440C61444C5D25 /* Build configuration list for PBXProject "GuitarTransposer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				947252613B5B4BFDC306A62B /* Debug */,
+				1505BABC1122A27D4F2B1ABC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7757077F2F4B2DFFAB86EFC7 /* Build configuration list for PBXNativeTarget "TransposerApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				513618008F268F93015BCA4B /* Debug */,
+				1F10B2F2D9E39B2E21B360F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A442C5ED9F05B519DC210B55 /* Build configuration list for PBXNativeTarget "TransposerExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6DC838AA239349EC630752C6 /* Debug */,
+				95ACA785574D02CAE7F7ED8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BDB15F70886618EEA4257355 /* Project object */;
+}

@@ -1,0 +1,44 @@
+name: GuitarTransposer
+options:
+  bundleIdPrefix: com.norhther.guitartransposer
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+configs:
+  Debug: debug
+  Release: release
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CLANG_CXX_LANGUAGE_STANDARD: "c++17"
+    CLANG_CXX_LIBRARY: "libc++"
+    TARGETED_DEVICE_FAMILY: "2"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+targets:
+  TransposerApp:
+    type: application
+    platform: iOS
+    sources:
+      - path: TransposerApp
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.norhther.guitartransposer
+        INFOPLIST_FILE: TransposerApp/Info.plist
+    dependencies:
+      - target: TransposerExtension
+        embed: true
+  TransposerExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: TransposerExtension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.norhther.guitartransposer.extension
+        INFOPLIST_FILE: TransposerExtension/Info.plist
+        SWIFT_OBJC_BRIDGING_HEADER: TransposerExtension/TransposerExtension-Bridging-Header.h
+        HEADER_SEARCH_PATHS:
+          - "$(SRCROOT)/Vendor/signalsmith-stretch"
+          - "$(SRCROOT)/Vendor/signalsmith-linear/.."

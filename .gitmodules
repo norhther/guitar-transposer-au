@@ -1,0 +1,6 @@
+[submodule "Vendor/signalsmith-stretch"]
+	path = Vendor/signalsmith-stretch
+	url = https://github.com/Signalsmith-Audio/signalsmith-stretch.git
+[submodule "Vendor/signalsmith-linear"]
+	path = Vendor/signalsmith-linear
+	url = https://github.com/Signalsmith-Audio/linear.git
