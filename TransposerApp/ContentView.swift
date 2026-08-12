@@ -5,6 +5,7 @@ import AVFoundation
 struct ContentView: View {
     @State private var audioUnit: TransposerAudioUnit?
     @State private var loadError: String?
+    private let engine = AVAudioEngine()
 
     var body: some View {
         Group {
@@ -35,7 +36,39 @@ struct ContentView: View {
                     self.loadError = error.localizedDescription
                     return
                 }
-                self.audioUnit = avAudioUnit?.auAudioUnit as? TransposerAudioUnit
+                guard let avAudioUnit = avAudioUnit else {
+                    self.loadError = "No audio unit instance was returned"
+                    return
+                }
+                self.audioUnit = avAudioUnit.auAudioUnit as? TransposerAudioUnit
+                self.startEngine(with: avAudioUnit)
+            }
+        }
+    }
+
+    /// Wires the AU into a live mic -> transposer -> speaker graph. Without this the
+    /// app instantiates the unit but never pulls audio through it — silent no-op.
+    private func startEngine(with node: AVAudioUnit) {
+        AVAudioApplication.requestRecordPermission { granted in
+            DispatchQueue.main.async {
+                guard granted else {
+                    self.loadError = "Microphone access denied"
+                    return
+                }
+                do {
+                    let session = AVAudioSession.sharedInstance()
+                    try session.setCategory(.playAndRecord, options: [.defaultToSpeaker, .allowBluetoothA2DP])
+                    try session.setActive(true)
+
+                    self.engine.attach(node)
+                    let inputFormat = self.engine.inputNode.outputFormat(forBus: 0)
+                    self.engine.connect(self.engine.inputNode, to: node, format: inputFormat)
+                    self.engine.connect(node, to: self.engine.mainMixerNode, format: nil)
+                    self.engine.prepare()
+                    try self.engine.start()
+                } catch {
+                    self.loadError = error.localizedDescription
+                }
             }
         }
     }

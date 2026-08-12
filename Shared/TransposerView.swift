@@ -10,6 +10,7 @@ struct TransposerView: View {
     @State private var semitones: Double = 0
     @State private var latencyModeIndex: Double = 1
     @State private var bypassed: Bool = false
+    @State private var observerToken: AUParameterObserverToken?
 
     private var semitonesParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.semitones.rawValue)! }
     private var latencyModeParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.latencyMode.rawValue)! }
@@ -51,6 +52,21 @@ struct TransposerView: View {
             semitones = Double(semitonesParam.value)
             latencyModeIndex = Double(latencyModeParam.value)
             bypassed = initialBypassed
+            observerToken = parameterTree.token(byAddingParameterObserver: { address, value in
+                DispatchQueue.main.async {
+                    switch TransposerParameterAddress(rawValue: address) {
+                    case .semitones: semitones = Double(value)
+                    case .latencyMode: latencyModeIndex = Double(value)
+                    case .none: break
+                    }
+                }
+            })
+        }
+        .onDisappear {
+            if let observerToken {
+                parameterTree.removeParameterObserver(observerToken)
+            }
+            observerToken = nil
         }
     }
 }

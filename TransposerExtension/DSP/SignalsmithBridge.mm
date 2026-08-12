@@ -10,6 +10,7 @@ static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode)
         case TransposerLatencyModeFast:     blockSeconds = 0.008; break;
         case TransposerLatencyModeBalanced: blockSeconds = 0.016; break;
         case TransposerLatencyModeQuality:  blockSeconds = 0.032; break;
+        default:                            blockSeconds = 0.016; break;
     }
     return std::max(64, static_cast<int>(sampleRate * blockSeconds));
 }
@@ -79,6 +80,14 @@ static float TransposerPeakAbs(const float *samples, uint32_t frameCount) {
     return peak;
 }
 
+static float TransposerPeakAbsAllChannels(const float * const *channels, int channelCount, uint32_t frameCount) {
+    float peak = 0.0f;
+    for (int c = 0; c < channelCount; c++) {
+        peak = std::max(peak, TransposerPeakAbs(channels[c], frameCount));
+    }
+    return peak;
+}
+
 - (void)processInputs:(const float * const *)inputs
                outputs:(float * const *)outputs
             frameCount:(uint32_t)frameCount {
@@ -86,10 +95,10 @@ static float TransposerPeakAbs(const float *samples, uint32_t frameCount) {
     if (pending != _appliedLatencyMode.load(std::memory_order_relaxed)) {
         [self applyLatencyMode:static_cast<TransposerLatencyMode>(pending)];
     }
-    _inputPeak.store(TransposerPeakAbs(inputs[0], frameCount), std::memory_order_relaxed);
+    _inputPeak.store(TransposerPeakAbsAllChannels(inputs, _channelCount, frameCount), std::memory_order_relaxed);
     _stretch.setTransposeSemitones(_semitones.load(std::memory_order_relaxed));
     _stretch.process(inputs, static_cast<int>(frameCount), outputs, static_cast<int>(frameCount));
-    _outputPeak.store(TransposerPeakAbs(outputs[0], frameCount), std::memory_order_relaxed);
+    _outputPeak.store(TransposerPeakAbsAllChannels(outputs, _channelCount, frameCount), std::memory_order_relaxed);
 }
 
 @end
