@@ -28,6 +28,8 @@ public class TransposerAudioUnit: AUAudioUnit {
 
     private let semitonesParam: AUParameter
     private let latencyModeParam: AUParameter
+    private let formantSemitonesParam: AUParameter
+    private let formantCompensateParam: AUParameter
     private let paramTree: AUParameterTree
 
     public override init(componentDescription: AudioComponentDescription,
@@ -56,7 +58,31 @@ public class TransposerAudioUnit: AUAudioUnit {
             dependentParameters: nil)
         latencyModeParam.value = 1
 
-        paramTree = AUParameterTree.createTree(withChildren: [semitonesParam, latencyModeParam])
+        formantSemitonesParam = AUParameterTree.createParameter(
+            withIdentifier: "formantSemitones",
+            name: "Formant",
+            address: TransposerParameterAddress.formantSemitones.rawValue,
+            min: -12, max: 12,
+            unit: .indexed,
+            unitName: nil,
+            flags: [.flag_IsWritable, .flag_IsReadable],
+            valueStrings: nil,
+            dependentParameters: nil)
+        formantSemitonesParam.value = 0
+
+        formantCompensateParam = AUParameterTree.createParameter(
+            withIdentifier: "formantCompensate",
+            name: "Compensate Formant",
+            address: TransposerParameterAddress.formantCompensate.rawValue,
+            min: 0, max: 1,
+            unit: .boolean,
+            unitName: nil,
+            flags: [.flag_IsWritable, .flag_IsReadable],
+            valueStrings: nil,
+            dependentParameters: nil)
+        formantCompensateParam.value = 0
+
+        paramTree = AUParameterTree.createTree(withChildren: [semitonesParam, latencyModeParam, formantSemitonesParam, formantCompensateParam])
 
         try super.init(componentDescription: componentDescription, options: options)
 
@@ -81,6 +107,10 @@ public class TransposerAudioUnit: AUAudioUnit {
                     self.willChangeValue(forKey: "latency")
                     self.didChangeValue(forKey: "latency")
                 }
+            case .formantSemitones:
+                self.bridge?.setFormantSemitones(Float(value))
+            case .formantCompensate:
+                self.bridge?.setFormantCompensate(value != 0)
             }
         }
         paramTree.implementorValueProvider = { param in
@@ -119,6 +149,8 @@ public class TransposerAudioUnit: AUAudioUnit {
         let channelCount = Int(outputBus.format.channelCount)
         bridge = SignalsmithBridge(sampleRate: sampleRate, channelCount: channelCount)
         bridge.setSemitones(Float(semitonesParam.value))
+        bridge.setFormantSemitones(Float(formantSemitonesParam.value))
+        bridge.setFormantCompensate(formantCompensateParam.value != 0)
         if let mode = TransposerLatencyMode(rawValue: Int(latencyModeParam.value)) {
             bridge.request(mode)
         }
@@ -175,6 +207,10 @@ public class TransposerAudioUnit: AUAudioUnit {
                             if let mode = TransposerLatencyMode(rawValue: Int(paramEvent.value)) {
                                 bridge.request(mode)
                             }
+                        case .formantSemitones:
+                            bridge.setFormantSemitones(Float(paramEvent.value))
+                        case .formantCompensate:
+                            bridge.setFormantCompensate(paramEvent.value != 0)
                         }
                     }
                 }

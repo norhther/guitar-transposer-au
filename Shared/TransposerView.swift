@@ -9,11 +9,15 @@ struct TransposerView: View {
 
     @State private var semitones: Double = 0
     @State private var latencyModeIndex: Double = 1
+    @State private var formantSemitones: Double = 0
+    @State private var formantCompensate: Bool = false
     @State private var bypassed: Bool = false
     @State private var observerToken: AUParameterObserverToken?
 
     private var semitonesParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.semitones.rawValue)! }
     private var latencyModeParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.latencyMode.rawValue)! }
+    private var formantSemitonesParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.formantSemitones.rawValue)! }
+    private var formantCompensateParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.formantCompensate.rawValue)! }
 
     var body: some View {
         VStack(spacing: 24) {
@@ -37,6 +41,18 @@ struct TransposerView: View {
                 latencyModeParam.value = AUValue(newValue)
             }
 
+            Stepper(value: $formantSemitones, in: -12...12, step: 1) {
+                Text("Formant: \(Int(formantSemitones))")
+            }
+            .onChange(of: formantSemitones) { newValue in
+                formantSemitonesParam.value = AUValue(newValue)
+            }
+
+            Toggle("Compensate Formant", isOn: $formantCompensate)
+                .onChange(of: formantCompensate) { newValue in
+                    formantCompensateParam.value = newValue ? 1 : 0
+                }
+
             Toggle("Bypass", isOn: $bypassed)
                 .onChange(of: bypassed) { newValue in
                     setBypassed(newValue)
@@ -51,12 +67,16 @@ struct TransposerView: View {
         .onAppear {
             semitones = Double(semitonesParam.value)
             latencyModeIndex = Double(latencyModeParam.value)
+            formantSemitones = Double(formantSemitonesParam.value)
+            formantCompensate = formantCompensateParam.value != 0
             bypassed = initialBypassed
             observerToken = parameterTree.token(byAddingParameterObserver: { address, value in
                 DispatchQueue.main.async {
                     switch TransposerParameterAddress(rawValue: address) {
                     case .semitones: semitones = Double(value)
                     case .latencyMode: latencyModeIndex = Double(value)
+                    case .formantSemitones: formantSemitones = Double(value)
+                    case .formantCompensate: formantCompensate = value != 0
                     case .none: break
                     }
                 }

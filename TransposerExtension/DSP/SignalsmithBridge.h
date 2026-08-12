@@ -25,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// Thread-safe from any thread.
 - (void)setSemitones:(float)semitones;
 
+/// Thread-safe from any thread.
+- (void)setFormantSemitones:(float)semitones;
+
+/// Thread-safe from any thread.
+- (void)setFormantCompensate:(BOOL)compensatePitch;
+
 /// Thread-safe from any thread. Peak absolute sample value (0...1 for normal signal
 /// levels) observed on the most recent -processInputs:outputs:frameCount: call.
 - (float)inputPeak;

@@ -23,6 +23,8 @@ static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode)
     std::atomic<int> _appliedLatencyMode;
     std::atomic<long> _appliedLatencySamples;
     std::atomic<float> _semitones;
+    std::atomic<float> _formantSemitones;
+    std::atomic<bool> _formantCompensate;
     std::atomic<float> _inputPeak;
     std::atomic<float> _outputPeak;
 }
@@ -33,6 +35,8 @@ static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode)
         _sampleRate = sampleRate;
         _channelCount = static_cast<int>(channelCount);
         _semitones.store(0.0f, std::memory_order_relaxed);
+        _formantSemitones.store(0.0f, std::memory_order_relaxed);
+        _formantCompensate.store(false, std::memory_order_relaxed);
         _pendingLatencyMode.store(TransposerLatencyModeBalanced, std::memory_order_relaxed);
         _appliedLatencyMode.store(-1, std::memory_order_relaxed);
         _appliedLatencySamples.store(0, std::memory_order_relaxed);
@@ -62,6 +66,14 @@ static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode)
 
 - (void)setSemitones:(float)semitones {
     _semitones.store(semitones, std::memory_order_relaxed);
+}
+
+- (void)setFormantSemitones:(float)semitones {
+    _formantSemitones.store(semitones, std::memory_order_relaxed);
+}
+
+- (void)setFormantCompensate:(BOOL)compensatePitch {
+    _formantCompensate.store(compensatePitch, std::memory_order_relaxed);
 }
 
 - (float)inputPeak {
@@ -97,6 +109,8 @@ static float TransposerPeakAbsAllChannels(const float * const *channels, int cha
     }
     _inputPeak.store(TransposerPeakAbsAllChannels(inputs, _channelCount, frameCount), std::memory_order_relaxed);
     _stretch.setTransposeSemitones(_semitones.load(std::memory_order_relaxed));
+    _stretch.setFormantSemitones(_formantSemitones.load(std::memory_order_relaxed),
+                                  _formantCompensate.load(std::memory_order_relaxed));
     _stretch.process(inputs, static_cast<int>(frameCount), outputs, static_cast<int>(frameCount));
     _outputPeak.store(TransposerPeakAbsAllChannels(outputs, _channelCount, frameCount), std::memory_order_relaxed);
 }
