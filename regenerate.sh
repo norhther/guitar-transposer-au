@@ -7,4 +7,5 @@ set -euo pipefail
 cd "$(dirname "$0")"
 xcodegen generate
 sed -i '' 's/objectVersion = [0-9]*;/objectVersion = 60;/' GuitarTransposer.xcodeproj/project.pbxproj
+sed -i '' '/preferredProjectObjectVersion = [0-9]*;/d' GuitarTransposer.xcodeproj/project.pbxproj
 echo "Regenerated and patched objectVersion to 60."

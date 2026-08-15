@@ -7,22 +7,29 @@ private final class BypassBox {
     var isBypassed: Bool = false
 }
 
+/// Everything the render block touches, behind one reference the block captures once.
+///
+/// `internalRenderBlock` can be fetched by a host *before* `allocateRenderResources()`
+/// runs, and hosts cache the block they got. Capturing `bridge` and the scratch buffers
+/// directly in the closure therefore freezes whatever state existed at fetch time —
+/// usually nil/empty — and the unit never renders. Going through this box means the
+/// closure sees whatever `allocateRenderResources()` later installs.
+private final class RenderState {
+    var bridge: SignalsmithBridge?
+    var scratchInput: [[Float]] = []
+    var scratchInputPointers: [UnsafePointer<Float>?] = []
+    var outputPointers: [UnsafeMutablePointer<Float>?] = []
+    var outputScratch: [[Float]] = []
+}
+
 public class TransposerAudioUnit: AUAudioUnit {
-    private var bridge: SignalsmithBridge!
     private var inputBus: AUAudioUnitBus!
     private var outputBus: AUAudioUnitBus!
     private var _inputBusArray: AUAudioUnitBusArray!
     private var _outputBusArray: AUAudioUnitBusArray!
 
-    private var scratchInput: [[Float]] = []
-    private var scratchInputPointers: [UnsafePointer<Float>?] = []
-    private var outputPointers: [UnsafeMutablePointer<Float>?] = []
-
-    /// Persistent output scratch storage, used only when a host hands us an
-    /// `AudioBufferList` with `mData == nil` (meaning "you supply the memory").
-    /// Same allocation pattern as `scratchInput`: sized once in
-    /// `allocateRenderResources`, freed in `deallocateRenderResources`.
-    private var outputScratch: [[Float]] = []
+    private let state = RenderState()
+    private var bridge: SignalsmithBridge? { state.bridge }
 
     private let bypassBox = BypassBox()
 
@@ -113,9 +120,11 @@ public class TransposerAudioUnit: AUAudioUnit {
                 self.bridge?.setFormantCompensate(value != 0)
             }
         }
-        paramTree.implementorValueProvider = { param in
-            param.value
-        }
+        // NOTE: do NOT set `implementorValueProvider`. Reading `param.value` from inside
+        // the provider re-enters the provider (that's what the getter calls), which
+        // recurses until the stack overflows -> EXC_BAD_ACCESS. With no provider set,
+        // AUParameter serves its own cached value, which is what we want here since the
+        // DSP never owns a value the UI can't already see.
     }
 
     public override var parameterTree: AUParameterTree? {
@@ -147,7 +156,7 @@ public class TransposerAudioUnit: AUAudioUnit {
         try super.allocateRenderResources()
         let sampleRate = outputBus.format.sampleRate
         let channelCount = Int(outputBus.format.channelCount)
-        bridge = SignalsmithBridge(sampleRate: sampleRate, channelCount: channelCount)
+        let bridge = SignalsmithBridge(sampleRate: sampleRate, channelCount: channelCount)
         bridge.setSemitones(Float(semitonesParam.value))
         bridge.setFormantSemitones(Float(formantSemitonesParam.value))
         bridge.setFormantCompensate(formantCompensateParam.value != 0)
@@ -156,40 +165,34 @@ public class TransposerAudioUnit: AUAudioUnit {
         }
 
         let maxFrames = Int(maximumFramesToRender)
-        scratchInput = Array(repeating: [Float](repeating: 0, count: maxFrames), count: channelCount)
-        scratchInputPointers = Array(repeating: nil, count: channelCount)
-        outputPointers = Array(repeating: nil, count: channelCount)
-        outputScratch = Array(repeating: [Float](repeating: 0, count: maxFrames), count: channelCount)
+        state.scratchInput = Array(repeating: [Float](repeating: 0, count: maxFrames), count: channelCount)
+        state.scratchInputPointers = Array(repeating: nil, count: channelCount)
+        state.outputPointers = Array(repeating: nil, count: channelCount)
+        state.outputScratch = Array(repeating: [Float](repeating: 0, count: maxFrames), count: channelCount)
+        // Published last: the render block treats a non-nil bridge as "buffers are ready".
+        state.bridge = bridge
     }
 
     public override func deallocateRenderResources() {
-        bridge = nil
-        scratchInput = []
-        scratchInputPointers = []
-        outputPointers = []
-        outputScratch = []
+        state.bridge = nil
+        state.scratchInput = []
+        state.scratchInputPointers = []
+        state.outputPointers = []
+        state.outputScratch = []
         super.deallocateRenderResources()
     }
 
     public override var internalRenderBlock: AUInternalRenderBlock {
-        // `bridge` may legitimately be nil here: a host can fetch this block before
-        // `allocateRenderResources()` has run. Fail safe instead of force-unwrapping.
-        guard let bridge = self.bridge else {
-            return { _, _, _, _, _, _, _ in kAudioUnitErr_Uninitialized }
-        }
-
-        // Capture the buffers and helpers the render closure needs as local strong
-        // references, taken once here (not the render thread — this getter just builds
-        // the block). The closure below deliberately captures none of `self`: no `[weak
-        // self]`, no strong `self` either, so there's no per-call weak-load lock and no
-        // reliance on `self` staying valid.
-        var scratchInputLocal = scratchInput
-        var scratchInputPointersLocal = scratchInputPointers
-        var outputPointersLocal = outputPointers
-        var outputScratchLocal = outputScratch
+        // Capture the two boxes strongly, once. Neither `self` nor any of its stored
+        // buffers is captured, so there's no per-call weak-load lock and no reliance on
+        // `self` outliving the block. The boxes are the only mutable state the render
+        // thread reads, and `allocateRenderResources()` fills them before publishing
+        // `state.bridge`.
+        let state = self.state
         let bypassBox = self.bypassBox
 
         return { actionFlags, timestamp, frameCount, outputBusNumber, outputData, realtimeEventListHead, pullInputBlock in
+            guard let bridge = state.bridge else { return kAudioUnitErr_Uninitialized }
             guard let pullInputBlock = pullInputBlock else { return kAudioUnitErr_NoConnection }
 
             // Walk host-delivered automation events (recorded automation lanes, some
@@ -225,8 +228,8 @@ public class TransposerAudioUnit: AUAudioUnit {
             // expected to supply the memory ourselves. Point those at our persistent
             // output scratch buffer before pulling input into them.
             for i in 0..<channelCount {
-                if bufferList[i].mData == nil, i < outputScratchLocal.count {
-                    outputScratchLocal[i].withUnsafeMutableBufferPointer { buf in
+                if bufferList[i].mData == nil, i < state.outputScratch.count {
+                    state.outputScratch[i].withUnsafeMutableBufferPointer { buf in
                         bufferList[i].mData = UnsafeMutableRawPointer(buf.baseAddress!)
                     }
                     bufferList[i].mDataByteSize = UInt32(frames * MemoryLayout<Float>.size)
@@ -245,18 +248,38 @@ public class TransposerAudioUnit: AUAudioUnit {
 
             // Write into the persistent instance-level pointer arrays in place (index
             // assignment, not append) so no array backing store is allocated per render call.
-            for i in 0..<channelCount {
+            // Never walk past what `allocateRenderResources()` sized: a host can hand us
+            // more channels than the bus format promised.
+            let safeChannels = min(channelCount, state.scratchInput.count)
+            for i in 0..<safeChannels {
                 guard let mData = bufferList[i].mData else { continue }
                 let outPtr = mData.assumingMemoryBound(to: Float.self)
-                scratchInputLocal[i].withUnsafeMutableBufferPointer { scratch in
+                state.scratchInput[i].withUnsafeMutableBufferPointer { scratch in
                     scratch.baseAddress!.update(from: outPtr, count: frames)
-                    scratchInputPointersLocal[i] = UnsafePointer(scratch.baseAddress!)
+                    state.scratchInputPointers[i] = UnsafePointer(scratch.baseAddress!)
                 }
-                outputPointersLocal[i] = outPtr
+                state.outputPointers[i] = outPtr
             }
 
-            scratchInputPointersLocal.withUnsafeMutableBufferPointer { inBuf in
-                outputPointersLocal.withUnsafeMutableBufferPointer { outBuf in
+            // The bridge was configured for `state.scratchInput.count` channels and
+            // always dereferences that many pointers. If the host handed us fewer
+            // buffers than the bus format promised, the tail slots would still hold
+            // nil (or a stale pointer from a previous call) — point them at our own
+            // scratch so the DSP reads silence instead of crashing.
+            if safeChannels < state.scratchInput.count {
+                for i in safeChannels..<state.scratchInput.count {
+                    state.scratchInput[i].withUnsafeMutableBufferPointer { scratch in
+                        scratch.baseAddress!.update(repeating: 0, count: frames)
+                        state.scratchInputPointers[i] = UnsafePointer(scratch.baseAddress!)
+                    }
+                    state.outputScratch[i].withUnsafeMutableBufferPointer { scratch in
+                        state.outputPointers[i] = scratch.baseAddress!
+                    }
+                }
+            }
+
+            state.scratchInputPointers.withUnsafeMutableBufferPointer { inBuf in
+                state.outputPointers.withUnsafeMutableBufferPointer { outBuf in
                     bridge.processInputs(inBuf.baseAddress!, outputs: outBuf.baseAddress!, frameCount: frameCount)
                 }
             }

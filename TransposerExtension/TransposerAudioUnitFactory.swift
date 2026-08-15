@@ -7,12 +7,19 @@ public class TransposerAudioUnitFactory: AUViewController, AUAudioUnitFactory {
     public func createAudioUnit(with componentDescription: AudioComponentDescription) throws -> AUAudioUnit {
         let audioUnit = try TransposerAudioUnit(componentDescription: componentDescription, options: [])
         self.audioUnit = audioUnit
-        installUIIfReady()
+        if Thread.isMainThread {
+            installUIIfReady()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.installUIIfReady()
+            }
+        }
         return audioUnit
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        preferredContentSize = CGSize(width: 400, height: 300)
         installUIIfReady()
     }
 
@@ -25,7 +32,7 @@ public class TransposerAudioUnitFactory: AUViewController, AUAudioUnitFactory {
         let hosting = TransposerViewController(audioUnit: audioUnit)
         hostingController = hosting
         addChild(hosting)
-        hosting.view.frame = view.bounds
+        hosting.view.frame = view.bounds.isEmpty ? CGRect(origin: .zero, size: preferredContentSize) : view.bounds
         hosting.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(hosting.view)
         hosting.didMove(toParent: self)

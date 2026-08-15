@@ -2,6 +2,8 @@ import SwiftUI
 import AudioToolbox
 import AVFoundation
 
+private var didRegisterComponent = false
+
 struct ContentView: View {
     @State private var audioUnit: TransposerAudioUnit?
     @State private var loadError: String?
@@ -21,6 +23,8 @@ struct ContentView: View {
     }
 
     private func loadAudioUnit() {
+        guard audioUnit == nil, loadError == nil else { return }
+
         var description = AudioComponentDescription()
         description.componentType = kAudioUnitType_Effect
         description.componentSubType = FourCharCode("gtrx".fourCharCode)
@@ -28,7 +32,13 @@ struct ContentView: View {
         description.componentFlags = 0
         description.componentFlagsMask = 0
 
-        AUAudioUnit.registerSubclass(TransposerAudioUnit.self, as: description, name: "Norhther: Guitar Transposer", version: 1)
+        // `registerSubclass` for the same description more than once per process is
+        // undefined behavior (can raise an uncatchable NSException). `onAppear` can refire
+        // when the system mic-permission alert backgrounds and re-foregrounds this view.
+        if !didRegisterComponent {
+            AUAudioUnit.registerSubclass(TransposerAudioUnit.self, as: description, name: "Norhther: Guitar Transposer", version: 1)
+            didRegisterComponent = true
+        }
 
         AVAudioUnit.instantiate(with: description, options: []) { avAudioUnit, error in
             DispatchQueue.main.async {
@@ -61,9 +71,16 @@ struct ContentView: View {
                     try session.setActive(true)
 
                     self.engine.attach(node)
+                    // Same format both sides: AU's output bus defaults to a hardcoded
+                    // 44100/2ch placeholder from init. Passing nil here would leave that
+                    // placeholder in place while the input side gets renegotiated to the
+                    // mic's real format (commonly 48k mono) -> a second sample-rate
+                    // converter node on the output leg stacked on top of the STFT.
+                    // Forcing both connections to the mic's native format keeps the
+                    // whole graph at one rate.
                     let inputFormat = self.engine.inputNode.outputFormat(forBus: 0)
                     self.engine.connect(self.engine.inputNode, to: node, format: inputFormat)
-                    self.engine.connect(node, to: self.engine.mainMixerNode, format: nil)
+                    self.engine.connect(node, to: self.engine.mainMixerNode, format: inputFormat)
                     self.engine.prepare()
                     try self.engine.start()
                 } catch {

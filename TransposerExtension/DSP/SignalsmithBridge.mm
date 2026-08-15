@@ -2,17 +2,35 @@
 #import <atomic>
 #import <algorithm>
 #import <cmath>
+#include <fenv.h>
 #include "signalsmith-stretch.h"
 
+/// ARM doesn't auto-flush denormals like x86 SSE. A decaying sustained note pushes the
+/// STFT's internal buffers into denormal range, and denormal float math runs 10-100x
+/// slower on some cores -> can miss the render deadline -> dropout on long notes/chords.
+/// FE_DFL_DISABLE_DENORMS_ENV flushes denormals to zero for this thread.
+static void TransposerEnableFlushToZero(void) {
+    fesetenv(FE_DFL_DISABLE_DENORMS_ENV);
+}
+
+/// Block length in seconds per mode.
+///
+/// These must stay in the same ballpark as the library's own presets, which are what
+/// the reference demo uses: presetDefault is block = SR*0.12, interval = SR*0.03;
+/// presetCheaper is 0.1 / 0.04. The block length sets the STFT's frequency resolution
+/// (bin spacing = SR/blockSamples), so shrinking it to chase latency destroys pitch
+/// tracking: a 16 ms block gives ~62 Hz bins, which cannot separate a low-E guitar
+/// fundamental (82 Hz) from its neighbours -> phase smearing and audible artifacts.
+/// 60 ms (~16 Hz bins) is about the floor for guitar-range material.
 static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode) {
     double blockSeconds;
     switch (mode) {
-        case TransposerLatencyModeFast:     blockSeconds = 0.008; break;
-        case TransposerLatencyModeBalanced: blockSeconds = 0.016; break;
-        case TransposerLatencyModeQuality:  blockSeconds = 0.032; break;
-        default:                            blockSeconds = 0.016; break;
+        case TransposerLatencyModeFast:     blockSeconds = 0.06; break;
+        case TransposerLatencyModeBalanced: blockSeconds = 0.09; break;
+        case TransposerLatencyModeQuality:  blockSeconds = 0.12; break;
+        default:                            blockSeconds = 0.09; break;
     }
-    return std::max(64, static_cast<int>(sampleRate * blockSeconds));
+    return std::max(256, static_cast<int>(sampleRate * blockSeconds));
 }
 
 @implementation SignalsmithBridge {
@@ -49,8 +67,14 @@ static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode)
 
 - (void)applyLatencyMode:(TransposerLatencyMode)mode {
     int blockSamples = TransposerBlockSamples(_sampleRate, mode);
-    int intervalSamples = std::max(32, blockSamples / 3);
-    _stretch.configure(_channelCount, blockSamples, intervalSamples);
+    // 4x overlap, matching presetDefault's 0.12 / 0.03 ratio.
+    int intervalSamples = std::max(64, blockSamples / 4);
+    // splitComputation=true: block is 60-120ms, way bigger than a render callback
+    // (~5-10ms). Without splitting, hitting a block boundary makes process() do the
+    // whole STFT synchronously on the render thread in one call -> can starve the
+    // callback deadline -> dropout, not spectral smearing, but same symptom. Splitting
+    // spreads that work across calls (presetCheaper does the same for this reason).
+    _stretch.configure(_channelCount, blockSamples, intervalSamples, true);
     _appliedLatencyMode.store(mode, std::memory_order_relaxed);
     long total = static_cast<long>(_stretch.inputLatency()) + static_cast<long>(_stretch.outputLatency());
     _appliedLatencySamples.store(total, std::memory_order_relaxed);
@@ -103,6 +127,7 @@ static float TransposerPeakAbsAllChannels(const float * const *channels, int cha
 - (void)processInputs:(const float * const *)inputs
                outputs:(float * const *)outputs
             frameCount:(uint32_t)frameCount {
+    TransposerEnableFlushToZero();
     int pending = _pendingLatencyMode.load(std::memory_order_relaxed);
     if (pending != _appliedLatencyMode.load(std::memory_order_relaxed)) {
         [self applyLatencyMode:static_cast<TransposerLatencyMode>(pending)];
