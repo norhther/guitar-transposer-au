@@ -12,12 +12,20 @@ struct TransposerView: View {
     @State private var formantSemitones: Double = 0
     @State private var formantCompensate: Bool = false
     @State private var bypassed: Bool = false
+    @State private var advancedEnabled: Bool = false
+    @State private var blockMilliseconds: Double = 90
+    @State private var overlap: Double = 4
+    @State private var tonalityLimit: Double = 0
     @State private var observerToken: AUParameterObserverToken?
 
     private var semitonesParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.semitones.rawValue)! }
     private var latencyModeParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.latencyMode.rawValue)! }
     private var formantSemitonesParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.formantSemitones.rawValue)! }
     private var formantCompensateParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.formantCompensate.rawValue)! }
+    private var advancedEnabledParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.advancedEnabled.rawValue)! }
+    private var blockMillisecondsParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.blockMilliseconds.rawValue)! }
+    private var overlapParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.overlap.rawValue)! }
+    private var tonalityLimitParam: AUParameter { parameterTree.parameter(withAddress: TransposerParameterAddress.tonalityLimit.rawValue)! }
 
     var body: some View {
         VStack(spacing: 24) {
@@ -31,14 +39,41 @@ struct TransposerView: View {
                 semitonesParam.value = AUValue(newValue)
             }
 
-            Picker("Latency Mode", selection: $latencyModeIndex) {
-                Text("Fast").tag(0.0)
-                Text("Balanced").tag(1.0)
-                Text("Quality").tag(2.0)
-            }
-            .pickerStyle(.segmented)
-            .onChange(of: latencyModeIndex) { newValue in
-                latencyModeParam.value = AUValue(newValue)
+            Toggle("Advanced", isOn: $advancedEnabled)
+                .onChange(of: advancedEnabled) { newValue in
+                    advancedEnabledParam.value = newValue ? 1 : 0
+                }
+
+            if advancedEnabled {
+                VStack(alignment: .leading) {
+                    Text("Block: \(Int(blockMilliseconds)) ms")
+                    Slider(value: $blockMilliseconds, in: 20...200, step: 5)
+                        .onChange(of: blockMilliseconds) { newValue in
+                            blockMillisecondsParam.value = AUValue(newValue)
+                        }
+
+                    Text("Overlap: \(String(format: "%.1fx", overlap))")
+                    Slider(value: $overlap, in: 2...8, step: 0.5)
+                        .onChange(of: overlap) { newValue in
+                            overlapParam.value = AUValue(newValue)
+                        }
+
+                    Text("Tonality Limit: \(String(format: "%.2f", tonalityLimit))")
+                    Slider(value: $tonalityLimit, in: 0...2, step: 0.05)
+                        .onChange(of: tonalityLimit) { newValue in
+                            tonalityLimitParam.value = AUValue(newValue)
+                        }
+                }
+            } else {
+                Picker("Latency Mode", selection: $latencyModeIndex) {
+                    Text("Fast").tag(0.0)
+                    Text("Balanced").tag(1.0)
+                    Text("Quality").tag(2.0)
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: latencyModeIndex) { newValue in
+                    latencyModeParam.value = AUValue(newValue)
+                }
             }
 
             Stepper(value: $formantSemitones, in: -12...12, step: 1) {
@@ -70,6 +105,10 @@ struct TransposerView: View {
             formantSemitones = Double(formantSemitonesParam.value)
             formantCompensate = formantCompensateParam.value != 0
             bypassed = initialBypassed
+            advancedEnabled = advancedEnabledParam.value != 0
+            blockMilliseconds = Double(blockMillisecondsParam.value)
+            overlap = Double(overlapParam.value)
+            tonalityLimit = Double(tonalityLimitParam.value)
             observerToken = parameterTree.token(byAddingParameterObserver: { address, value in
                 DispatchQueue.main.async {
                     switch TransposerParameterAddress(rawValue: address) {
@@ -77,6 +116,10 @@ struct TransposerView: View {
                     case .latencyMode: latencyModeIndex = Double(value)
                     case .formantSemitones: formantSemitones = Double(value)
                     case .formantCompensate: formantCompensate = value != 0
+                    case .advancedEnabled: advancedEnabled = value != 0
+                    case .blockMilliseconds: blockMilliseconds = Double(value)
+                    case .overlap: overlap = Double(value)
+                    case .tonalityLimit: tonalityLimit = Double(value)
                     case .none: break
                     }
                 }

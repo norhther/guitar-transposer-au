@@ -37,6 +37,10 @@ public class TransposerAudioUnit: AUAudioUnit {
     private let latencyModeParam: AUParameter
     private let formantSemitonesParam: AUParameter
     private let formantCompensateParam: AUParameter
+    private let advancedEnabledParam: AUParameter
+    private let blockMillisecondsParam: AUParameter
+    private let overlapParam: AUParameter
+    private let tonalityLimitParam: AUParameter
     private let paramTree: AUParameterTree
 
     public override init(componentDescription: AudioComponentDescription,
@@ -89,7 +93,58 @@ public class TransposerAudioUnit: AUAudioUnit {
             dependentParameters: nil)
         formantCompensateParam.value = 0
 
-        paramTree = AUParameterTree.createTree(withChildren: [semitonesParam, latencyModeParam, formantSemitonesParam, formantCompensateParam])
+        advancedEnabledParam = AUParameterTree.createParameter(
+            withIdentifier: "advancedEnabled",
+            name: "Advanced",
+            address: TransposerParameterAddress.advancedEnabled.rawValue,
+            min: 0, max: 1,
+            unit: .boolean,
+            unitName: nil,
+            flags: [.flag_IsWritable, .flag_IsReadable],
+            valueStrings: nil,
+            dependentParameters: nil)
+        advancedEnabledParam.value = 0
+
+        blockMillisecondsParam = AUParameterTree.createParameter(
+            withIdentifier: "blockMilliseconds",
+            name: "Block (ms)",
+            address: TransposerParameterAddress.blockMilliseconds.rawValue,
+            min: 20, max: 200,
+            unit: .milliseconds,
+            unitName: nil,
+            flags: [.flag_IsWritable, .flag_IsReadable],
+            valueStrings: nil,
+            dependentParameters: nil)
+        blockMillisecondsParam.value = 90
+
+        overlapParam = AUParameterTree.createParameter(
+            withIdentifier: "overlap",
+            name: "Overlap",
+            address: TransposerParameterAddress.overlap.rawValue,
+            min: 2, max: 8,
+            unit: .ratio,
+            unitName: nil,
+            flags: [.flag_IsWritable, .flag_IsReadable],
+            valueStrings: nil,
+            dependentParameters: nil)
+        overlapParam.value = 4
+
+        tonalityLimitParam = AUParameterTree.createParameter(
+            withIdentifier: "tonalityLimit",
+            name: "Tonality Limit",
+            address: TransposerParameterAddress.tonalityLimit.rawValue,
+            min: 0, max: 2,
+            unit: .generic,
+            unitName: nil,
+            flags: [.flag_IsWritable, .flag_IsReadable],
+            valueStrings: nil,
+            dependentParameters: nil)
+        tonalityLimitParam.value = 0
+
+        paramTree = AUParameterTree.createTree(withChildren: [
+            semitonesParam, latencyModeParam, formantSemitonesParam, formantCompensateParam,
+            advancedEnabledParam, blockMillisecondsParam, overlapParam, tonalityLimitParam,
+        ])
 
         try super.init(componentDescription: componentDescription, options: options)
 
@@ -118,6 +173,14 @@ public class TransposerAudioUnit: AUAudioUnit {
                 self.bridge?.setFormantSemitones(Float(value))
             case .formantCompensate:
                 self.bridge?.setFormantCompensate(value != 0)
+            case .advancedEnabled:
+                self.bridge?.setAdvancedEnabled(value != 0)
+            case .blockMilliseconds:
+                self.bridge?.setAdvancedBlockMilliseconds(Float(value))
+            case .overlap:
+                self.bridge?.setAdvancedOverlap(Float(value))
+            case .tonalityLimit:
+                self.bridge?.setTonalityLimit(Float(value))
             }
         }
         // NOTE: do NOT set `implementorValueProvider`. Reading `param.value` from inside
@@ -160,6 +223,10 @@ public class TransposerAudioUnit: AUAudioUnit {
         bridge.setSemitones(Float(semitonesParam.value))
         bridge.setFormantSemitones(Float(formantSemitonesParam.value))
         bridge.setFormantCompensate(formantCompensateParam.value != 0)
+        bridge.setAdvancedEnabled(advancedEnabledParam.value != 0)
+        bridge.setAdvancedBlockMilliseconds(Float(blockMillisecondsParam.value))
+        bridge.setAdvancedOverlap(Float(overlapParam.value))
+        bridge.setTonalityLimit(Float(tonalityLimitParam.value))
         if let mode = TransposerLatencyMode(rawValue: Int(latencyModeParam.value)) {
             bridge.request(mode)
         }
@@ -214,6 +281,14 @@ public class TransposerAudioUnit: AUAudioUnit {
                             bridge.setFormantSemitones(Float(paramEvent.value))
                         case .formantCompensate:
                             bridge.setFormantCompensate(paramEvent.value != 0)
+                        case .advancedEnabled:
+                            bridge.setAdvancedEnabled(paramEvent.value != 0)
+                        case .blockMilliseconds:
+                            bridge.setAdvancedBlockMilliseconds(Float(paramEvent.value))
+                        case .overlap:
+                            bridge.setAdvancedOverlap(Float(paramEvent.value))
+                        case .tonalityLimit:
+                            bridge.setTonalityLimit(Float(paramEvent.value))
                         }
                     }
                 }

@@ -38,13 +38,21 @@ static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode)
     double _sampleRate;
     int _channelCount;
     std::atomic<int> _pendingLatencyMode;
-    std::atomic<int> _appliedLatencyMode;
     std::atomic<long> _appliedLatencySamples;
     std::atomic<float> _semitones;
     std::atomic<float> _formantSemitones;
     std::atomic<bool> _formantCompensate;
     std::atomic<float> _inputPeak;
     std::atomic<float> _outputPeak;
+    std::atomic<bool> _advancedEnabled;
+    std::atomic<float> _advancedBlockMs;
+    std::atomic<float> _advancedOverlap;
+    std::atomic<float> _tonalityLimit;
+    // Bumped by every setter that changes block/interval sizing (latency mode, advanced
+    // enable, block ms, overlap). The render thread reconfigures whenever this doesn't
+    // match what it last applied -- one counter instead of one comparison per knob.
+    std::atomic<int> _configGeneration;
+    std::atomic<int> _appliedConfigGeneration;
 }
 
 - (instancetype)initWithSampleRate:(double)sampleRate channelCount:(NSInteger)channelCount {
@@ -56,32 +64,70 @@ static int TransposerBlockSamples(double sampleRate, TransposerLatencyMode mode)
         _formantSemitones.store(0.0f, std::memory_order_relaxed);
         _formantCompensate.store(false, std::memory_order_relaxed);
         _pendingLatencyMode.store(TransposerLatencyModeBalanced, std::memory_order_relaxed);
-        _appliedLatencyMode.store(-1, std::memory_order_relaxed);
         _appliedLatencySamples.store(0, std::memory_order_relaxed);
         _inputPeak.store(0.0f, std::memory_order_relaxed);
         _outputPeak.store(0.0f, std::memory_order_relaxed);
+        _advancedEnabled.store(false, std::memory_order_relaxed);
+        _advancedBlockMs.store(90.0f, std::memory_order_relaxed);
+        _advancedOverlap.store(4.0f, std::memory_order_relaxed);
+        // 0 is a special case the library treats as "unlimited" (full-spectrum tonal
+        // treatment, matches the behavior before this parameter existed). Small >0
+        // values restrict tonal/phase-locked treatment to low frequencies only (more
+        // noise-like texture up top); values near/above 1 are close to unlimited again.
+        _tonalityLimit.store(0.0f, std::memory_order_relaxed);
+        _configGeneration.store(0, std::memory_order_relaxed);
+        _appliedConfigGeneration.store(-1, std::memory_order_relaxed);
         [self applyLatencyMode:TransposerLatencyModeBalanced];
     }
     return self;
 }
 
 - (void)applyLatencyMode:(TransposerLatencyMode)mode {
-    int blockSamples = TransposerBlockSamples(_sampleRate, mode);
-    // 4x overlap, matching presetDefault's 0.12 / 0.03 ratio.
-    int intervalSamples = std::max(64, blockSamples / 4);
-    // splitComputation=true: block is 60-120ms, way bigger than a render callback
+    int blockSamples;
+    int intervalSamples;
+    if (_advancedEnabled.load(std::memory_order_relaxed)) {
+        float ms = _advancedBlockMs.load(std::memory_order_relaxed);
+        float overlap = std::max(1.0f, _advancedOverlap.load(std::memory_order_relaxed));
+        blockSamples = std::max(256, static_cast<int>(_sampleRate * (ms / 1000.0)));
+        intervalSamples = std::max(64, static_cast<int>(blockSamples / overlap));
+    } else {
+        blockSamples = TransposerBlockSamples(_sampleRate, mode);
+        // 4x overlap, matching presetDefault's 0.12 / 0.03 ratio.
+        intervalSamples = std::max(64, blockSamples / 4);
+    }
+    // splitComputation=true: block can be 60-200ms, way bigger than a render callback
     // (~5-10ms). Without splitting, hitting a block boundary makes process() do the
     // whole STFT synchronously on the render thread in one call -> can starve the
     // callback deadline -> dropout, not spectral smearing, but same symptom. Splitting
     // spreads that work across calls (presetCheaper does the same for this reason).
     _stretch.configure(_channelCount, blockSamples, intervalSamples, true);
-    _appliedLatencyMode.store(mode, std::memory_order_relaxed);
+    _appliedConfigGeneration.store(_configGeneration.load(std::memory_order_relaxed), std::memory_order_relaxed);
     long total = static_cast<long>(_stretch.inputLatency()) + static_cast<long>(_stretch.outputLatency());
     _appliedLatencySamples.store(total, std::memory_order_relaxed);
 }
 
 - (void)requestLatencyMode:(TransposerLatencyMode)mode {
     _pendingLatencyMode.store(mode, std::memory_order_relaxed);
+    _configGeneration.fetch_add(1, std::memory_order_relaxed);
+}
+
+- (void)setAdvancedEnabled:(BOOL)enabled {
+    _advancedEnabled.store(enabled, std::memory_order_relaxed);
+    _configGeneration.fetch_add(1, std::memory_order_relaxed);
+}
+
+- (void)setAdvancedBlockMilliseconds:(float)milliseconds {
+    _advancedBlockMs.store(milliseconds, std::memory_order_relaxed);
+    _configGeneration.fetch_add(1, std::memory_order_relaxed);
+}
+
+- (void)setAdvancedOverlap:(float)overlap {
+    _advancedOverlap.store(overlap, std::memory_order_relaxed);
+    _configGeneration.fetch_add(1, std::memory_order_relaxed);
+}
+
+- (void)setTonalityLimit:(float)tonalityLimit {
+    _tonalityLimit.store(tonalityLimit, std::memory_order_relaxed);
 }
 
 - (NSInteger)appliedLatencySamples {
@@ -128,12 +174,13 @@ static float TransposerPeakAbsAllChannels(const float * const *channels, int cha
                outputs:(float * const *)outputs
             frameCount:(uint32_t)frameCount {
     TransposerEnableFlushToZero();
-    int pending = _pendingLatencyMode.load(std::memory_order_relaxed);
-    if (pending != _appliedLatencyMode.load(std::memory_order_relaxed)) {
-        [self applyLatencyMode:static_cast<TransposerLatencyMode>(pending)];
+    if (_configGeneration.load(std::memory_order_relaxed) != _appliedConfigGeneration.load(std::memory_order_relaxed)) {
+        int mode = _pendingLatencyMode.load(std::memory_order_relaxed);
+        [self applyLatencyMode:static_cast<TransposerLatencyMode>(mode)];
     }
     _inputPeak.store(TransposerPeakAbsAllChannels(inputs, _channelCount, frameCount), std::memory_order_relaxed);
-    _stretch.setTransposeSemitones(_semitones.load(std::memory_order_relaxed));
+    _stretch.setTransposeSemitones(_semitones.load(std::memory_order_relaxed),
+                                    _tonalityLimit.load(std::memory_order_relaxed));
     _stretch.setFormantSemitones(_formantSemitones.load(std::memory_order_relaxed),
                                   _formantCompensate.load(std::memory_order_relaxed));
     _stretch.process(inputs, static_cast<int>(frameCount), outputs, static_cast<int>(frameCount));

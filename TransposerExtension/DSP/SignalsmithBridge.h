@@ -31,6 +31,22 @@ NS_ASSUME_NONNULL_BEGIN
 /// Thread-safe from any thread.
 - (void)setFormantCompensate:(BOOL)compensatePitch;
 
+/// Thread-safe from any thread. When enabled, block/overlap come from
+/// -setAdvancedBlockMilliseconds:/-setAdvancedOverlap: instead of the latency-mode
+/// preset. Takes effect on the render thread's next call, like -requestLatencyMode:.
+- (void)setAdvancedEnabled:(BOOL)enabled;
+
+/// Thread-safe from any thread. STFT block length in milliseconds (advanced mode only).
+- (void)setAdvancedBlockMilliseconds:(float)milliseconds;
+
+/// Thread-safe from any thread. Block/interval ratio, e.g. 4 = 4x overlap (advanced mode only).
+- (void)setAdvancedOverlap:(float)overlap;
+
+/// Thread-safe from any thread. 0...1: how much of the spectrum gets phase-locked
+/// "tonal" treatment vs randomized "noise-like" treatment. Applied every render call,
+/// no reconfigure needed.
+- (void)setTonalityLimit:(float)tonalityLimit;
+
 /// Thread-safe from any thread. Peak absolute sample value (0...1 for normal signal
 /// levels) observed on the most recent -processInputs:outputs:frameCount: call.
 - (float)inputPeak;
