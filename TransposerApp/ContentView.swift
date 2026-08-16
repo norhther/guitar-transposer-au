@@ -7,6 +7,7 @@ private var didRegisterComponent = false
 struct ContentView: View {
     @State private var audioUnit: TransposerAudioUnit?
     @State private var loadError: String?
+    @State private var showDiagnostics = false
     private let engine = AVAudioEngine()
 
     var body: some View {
@@ -20,6 +21,14 @@ struct ContentView: View {
             }
         }
         .onAppear(perform: loadAudioUnit)
+        // Temporary: probe for the missing-AUv3-icon investigation.
+        .overlay(alignment: .topTrailing) {
+            Button("Icon Probe") { showDiagnostics = true }
+                .padding(8)
+                .background(.ultraThinMaterial, in: Capsule())
+                .padding()
+        }
+        .sheet(isPresented: $showDiagnostics) { IconDiagnosticsView() }
     }
 
     private func loadAudioUnit() {

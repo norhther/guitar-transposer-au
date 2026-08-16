@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,10 +20,12 @@
 		7E2161E1E1AF05CC6E902B71 /* PeakMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5934A13295C8C5D1B5B6FC6 /* PeakMeter.swift */; };
 		910D0142DF64D678884E4437 /* TransposerParameterAddresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */; };
 		96E2F118A7BD71D72DB0B02F /* TransposerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9730033B5F42F874B6896AE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 752BC91543490714E0E9E47F /* Assets.xcassets */; };
 		A92940C2EA3FC0A2BEE5A141 /* TransposerAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175E26A60EA683C535696858 /* TransposerAudioUnit.swift */; };
 		C333A3203537AB4CE4815C2F /* IntervalName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24906A259E81C61B9D670291 /* IntervalName.swift */; };
 		CBBA7D29ED2E4AA77D03A7B1 /* TransposerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */; };
 		E321D3634E255B4517DDCC4D /* SignalsmithBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 415B8F93B83D66EBCC867D1A /* SignalsmithBridge.mm */; };
+		F53942E7ABB4C7FC9E1471DA /* IconDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC43A2EBCE0607CB8858178A /* IconDiagnostics.swift */; };
 		FEFD7008461561F715AB2107 /* TransposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB61FD831B065DC7E7948F6 /* TransposerViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,19 +57,22 @@
 		0069D4C1A6C1458C27692BDB /* TransposerParameterAddresses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerParameterAddresses.swift; sourceTree = "<group>"; };
 		175E26A60EA683C535696858 /* TransposerAudioUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerAudioUnit.swift; sourceTree = "<group>"; };
 		19988CFB0102B05CDED55E0D /* TransposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerView.swift; sourceTree = "<group>"; };
-		1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TransposerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D4A98555A21C1C5799C4A6D /* TransposerExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TransposerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		24906A259E81C61B9D670291 /* IntervalName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalName.swift; sourceTree = "<group>"; };
 		2495849CBE21B64A505229BC /* SignalsmithBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalsmithBridge.h; sourceTree = "<group>"; };
 		415B8F93B83D66EBCC867D1A /* SignalsmithBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SignalsmithBridge.mm; sourceTree = "<group>"; };
 		53C210B682CDF3418E48ED39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		752BC91543490714E0E9E47F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		89867FC1C3F3BDE71D42B7DD /* TransposerApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TransposerApp.entitlements; sourceTree = "<group>"; };
 		92D823AA2D9AF226DE8D366D /* TransposerExtension-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TransposerExtension-Bridging-Header.h"; sourceTree = "<group>"; };
 		963253B420793442628C07A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BC43A2EBCE0607CB8858178A /* IconDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconDiagnostics.swift; sourceTree = "<group>"; };
 		BEB61FD831B065DC7E7948F6 /* TransposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerViewController.swift; sourceTree = "<group>"; };
 		BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerApp.swift; sourceTree = "<group>"; };
 		CA4053AD51643DE4DED5D8AB /* TransposerAudioUnitFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransposerAudioUnitFactory.swift; sourceTree = "<group>"; };
 		D6A80FFA310D4068E81FFAAE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E343952647FA87F6BE4B4DD1 /* TransposerApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TransposerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E7108331D410993C158E22AB /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		E7108331D410993C158E22AB /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		F5934A13295C8C5D1B5B6FC6 /* PeakMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeakMeter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,8 +114,11 @@
 		4E4FC48319ABE7EEE26ADBEF /* TransposerApp */ = {
 			isa = PBXGroup;
 			children = (
+				752BC91543490714E0E9E47F /* Assets.xcassets */,
 				D6A80FFA310D4068E81FFAAE /* ContentView.swift */,
+				BC43A2EBCE0607CB8858178A /* IconDiagnostics.swift */,
 				53C210B682CDF3418E48ED39 /* Info.plist */,
+				89867FC1C3F3BDE71D42B7DD /* TransposerApp.entitlements */,
 				BF8EF97B846FD5E25D42DD9A /* TransposerApp.swift */,
 			);
 			path = TransposerApp;
@@ -143,6 +151,7 @@
 			buildConfigurationList = 7757077F2F4B2DFFAB86EFC7 /* Build configuration list for PBXNativeTarget "TransposerApp" */;
 			buildPhases = (
 				E6B14E17E373CB565763A2C2 /* Sources */,
+				CF1A9E705125481CACEE8958 /* Resources */,
 				065528FB50BFB0A19EDFBC3C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -181,10 +190,19 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					02FB628962CC90A5E80B75B6 = {
+						DevelopmentTeam = 327GNX96WY;
+						ProvisioningStyle = Automatic;
+					};
+					F50B99C25B736248DAC645ED = {
+						DevelopmentTeam = 327GNX96WY;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 10E3A49509440C61444C5D25 /* Build configuration list for PBXProject "GuitarTransposer" */;
-			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -202,6 +220,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CF1A9E705125481CACEE8958 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9730033B5F42F874B6896AE5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B2FF09BE0563F7D2D58F3D80 /* Sources */ = {
@@ -224,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F0F187F7CE368AB1D5FCE2A /* ContentView.swift in Sources */,
+				F53942E7ABB4C7FC9E1471DA /* IconDiagnostics.swift in Sources */,
 				62BBFB36AD970FAAF292DA1A /* IntervalName.swift in Sources */,
 				7E2161E1E1AF05CC6E902B71 /* PeakMeter.swift in Sources */,
 				E321D3634E255B4517DDCC4D /* SignalsmithBridge.mm in Sources */,
@@ -279,8 +309,12 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 327GNX96WY;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -307,8 +341,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 327GNX96WY;
+				CODE_SIGN_ENTITLEMENTS = TransposerApp/TransposerApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendor/signalsmith-stretch",
 					"$(SRCROOT)/Vendor/signalsmith-linear/..",
@@ -329,8 +363,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 327GNX96WY;
+				CODE_SIGN_ENTITLEMENTS = TransposerApp/TransposerApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendor/signalsmith-stretch",
 					"$(SRCROOT)/Vendor/signalsmith-linear/..",
@@ -350,7 +384,6 @@
 		6DC838AA239349EC630752C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 327GNX96WY;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendor/signalsmith-stretch",
 					"$(SRCROOT)/Vendor/signalsmith-linear/..",
@@ -361,7 +394,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.aufx;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
@@ -401,8 +434,12 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 327GNX96WY;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -435,7 +472,6 @@
 		95ACA785574D02CAE7F7ED8E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 327GNX96WY;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendor/signalsmith-stretch",
 					"$(SRCROOT)/Vendor/signalsmith-linear/..",
@@ -446,7 +482,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.norhther.guitartransposer.aufx;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "TransposerExtension/TransposerExtension-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
